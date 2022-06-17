@@ -18,7 +18,7 @@ import Typography from "@mui/material/Typography";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as MaxihostLogo } from "static/maxihost-logo.svg";
+import { ReactComponent as MaxihostLogo } from "assets/maxihost-logo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { LogoContainer } from "./Main.styles";
