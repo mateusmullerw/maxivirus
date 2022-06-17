@@ -5,7 +5,7 @@ import UserDetails from "./pages/UserDetails/UserDetails";
 
 const AppRoutes = () => (
   <Routes>
-    <Route path='/:page' element={<Home />} />
+    <Route path='/:urlPage' element={<Home />} />
     <Route path='/about' element={<About />} />
     <Route path='/user/:id' element={<UserDetails />} />
     <Route path='/' element={<Navigate to="/1" replace />} />

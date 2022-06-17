@@ -1,6 +1,20 @@
 import React, {createContext, useEffect, useState} from 'react';
 import { api } from './api/axios';
 
+type Filters = {
+    name: string;
+    survival: "All" | "Survivor" | "Infected";
+    state: string | undefined;
+    gender: string;
+}
+
+const initialFilters: Filters = {
+    name: "",
+    survival: "All",
+    state: undefined,
+    gender: "none"
+}
+
 type InfectedByUser = {
     id: string
 }
@@ -45,34 +59,43 @@ type RawData = {
     results: RawCitzenInfo[],
 }
 
-interface CitizenInfo extends RawCitzenInfo{
+export interface CitizenInfo extends RawCitzenInfo{
+    id: string,
     infected: boolean,
 }
 
-interface PopulationData {
+export interface PopulationData {
     [key: string]: CitizenInfo[];
  }
 
-const initialPopulationData: PopulationData = {1: []};
+const initialPopulationData: CitizenInfo[] = [];
 
 type PopulationContextType={
-    populationData: PopulationData,
+    loading: boolean,
+    currentPageData: CitizenInfo[],
     editCitzen: Function,
     page: number,
     setPage: Function,
-    resultsPerPage: number,
-    setResultsPerPage: Function,
+    pageSize: number,
+    setPageSize: Function,
+    filters: Filters,
+    setFilters: Function,
     setNationality: Function,
+    numberOfPages: number,
 }
 
 const initialValue: PopulationContextType = {
-    populationData: {0: []},
+    loading: true,
+    currentPageData: [],
     editCitzen: ()=>{},
     page: 1,
     setPage: ()=>{},
-    resultsPerPage: 10,
-    setResultsPerPage: ()=>{},
+    pageSize: 10,
+    setPageSize: ()=>{},
+    filters: initialFilters,
+    setFilters: ()=>{},
     setNationality: ()=>{},
+    numberOfPages: 1,
 }
 export const PopulationContext = createContext<PopulationContextType>(initialValue)
 
@@ -80,49 +103,102 @@ type PopulationProviderProps = {
     children: React.ReactNode,
 }
 const PopulationProvider = (props: PopulationProviderProps) => {
+    const resultsNumber = 500;
+    const seed = "maxihost"
+
+    const [loading, setLoading] = useState(initialValue.loading)
     const [populationData, setPopulationData] = useState(initialPopulationData)
+    const [filteredData, setFilteredData] = useState(initialPopulationData)
+    const [currentPageData, setCurrentPageData] = useState(initialPopulationData)
     const [page, setPage] = useState(initialValue.page)
-    const [resultsPerPage, setResultsPerPage] = useState(initialValue.resultsPerPage)
+    const [pageSize, setPageSize] = useState(initialValue.pageSize)
     const [nationality, setNationality] = useState("br")
     const [infectedByUser, setInfectedByUser] = useState<InfectedByUser[]>([])
-    
-    const seed = "maxihost"
+    const [filters, setFilters] = useState<Filters>(initialFilters)
 
     const mapRawData = (rawData: RawData) => {
         const processedData = rawData.results.map((citzen) => {
-            const infected = citzen.location.postcode % 3 > 0 || 
-                infectedByUser.find(item => item.id === citzen.email)
-
-            return({...citzen, infected: infected})
+            let infected = citzen.location.postcode % 3 > 0
+            const wasInfectedByUser = infectedByUser.find(item => item.id === citzen.email)
+            if(wasInfectedByUser){
+                infected = true;
+            }
+            return({...citzen, id: citzen.email, infected: infected})
         })
         return processedData
     }
 
     const getPopulationData = () => {
-        api.get(`/?seed=${seed}&page=${page}&results=${resultsPerPage}&nat=${nationality}&exc=login,id,timezone,&noinfo`)
+        setLoading(true)
+        api.get(`/?seed=${seed}&results=${resultsNumber}&nat=${nationality}&exc=login,id,timezone,&noinfo`)
         .then((response) =>{ 
             const processedData = mapRawData(response.data)
-            console.log({...populationData, [page]: processedData})
-            setPopulationData({...populationData, [page]: processedData})})
+            setPopulationData(processedData)
+            setLoading(false)
+        })
         .catch((err) => {
           console.error("Something went wrong:" + err);
         });
     }
 
     useEffect(()=>{
-        if(!populationData[page] || populationData[page].length !== resultsPerPage){
-            getPopulationData()
+        getCurrentPageData()
+    }, [filteredData])
+
+    const getCurrentPageData = () => {
+        const firstIndex = (page - 1) * pageSize;   
+        const lastIndex = firstIndex + pageSize;
+        const newPage = filteredData.slice(firstIndex, lastIndex)
+        setCurrentPageData(newPage)
+    }
+
+    useEffect(()=>{
+        let newFilteredData = populationData
+        if(filters.survival === "Survivor"){
+            newFilteredData = populationData.filter(item => !item.infected)
         }
-    }, [seed, page, resultsPerPage, nationality])
+        if(filters.survival === "Infected"){
+            newFilteredData = populationData.filter(item => item.infected)
+        }
+
+        if(filters.state){
+        newFilteredData = newFilteredData.filter(item => item.location.state === filters.state)
+        }
+
+        newFilteredData = newFilteredData.filter(item => {
+            let fullName = item.name.first + " " + item.name.last
+            fullName = fullName.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
+
+            const normalizedFilter = filters.name.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
+
+            if(fullName.includes(normalizedFilter)){
+                return true
+            }
+        })
+        setFilteredData(newFilteredData)
+        setPage(1)
+    }, [populationData, filters])
+
+    useEffect(()=>{
+        if(populationData.length === 0){
+            getPopulationData()
+        }else{
+            getCurrentPageData()
+        }
+    }, [seed, page, pageSize, nationality])
    
     const value = {
-        populationData: populationData,
+        loading: loading,
+        currentPageData: currentPageData,
         editCitzen: ()=>(console.log("edit")),
         page: page,
         setPage: setPage,
-        resultsPerPage: resultsPerPage,
-        setResultsPerPage: setResultsPerPage,
+        pageSize: pageSize,
+        setPageSize: setPageSize,
+        filters,
+        setFilters: setFilters,
         setNationality: setNationality,
+        numberOfPages: Math.ceil(filteredData.length / pageSize)
     }
     return <PopulationContext.Provider value={value} >{props.children}</PopulationContext.Provider>
   }

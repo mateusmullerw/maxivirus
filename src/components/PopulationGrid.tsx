@@ -30,37 +30,66 @@ const columns: GridColDef[] = [
   {
     disableExport: true,
     field: "id",
-    filterable: false,
     headerName: "ID",
     sortable: false,
-    
   },
   {
     width: 220,
     disableExport: true,
     field: "name",
-    filterable: false,
     headerName: "Name",
     renderCell: (params: GridRenderCellParams<AvatarProp>) => renderAvatar(params.value?.name, params.value?.image),
     sortable: false,
     
   },
   {
+    disableExport: true,
+    field: "age",
+    headerName: "Age",
+    sortable: true,    
+  },
+  {
     width: 120,
     disableExport: true,
     field: "infected",
-    filterable: true,
     headerName: "Infected",
     renderCell: (params: GridRenderCellParams<boolean>) => renderInfected(params.value),
     sortable: true,
     
   },
   {
+    width: 130,
+    disableExport: true,
+    field: "doi",
+    headerName: "Date of infection",
+    sortable: true,    
+  },
+  {
     width: 150,
     disableExport: true,
     field: "state",
-    filterable: true,
     headerName: "State",
+    sortable: true,    
+  },
+  {
+    width: 150,
+    disableExport: true,
+    field: "city",
+    headerName: "City",
+    sortable: true,    
+  },
+  {
+    width: 250,
+    disableExport: true,
+    field: "email",
+    headerName: "Email",
+    sortable: true,    
+  },
+  {
+    width: 150,
+    disableExport: true,
+    field: "phone",
+    headerName: "Phone",
     sortable: true,    
   },
 ]
@@ -71,8 +100,9 @@ type GridProps = {
   setPage: Function,
   page: number,
   setPageSize: Function,
+  numberOfPages: number,
 }
-const Grid: React.FC<GridProps> = ({populationDataPage, loading, setPage, page, setPageSize}) => {
+const Grid: React.FC<GridProps> = ({populationDataPage, loading, setPage, page, setPageSize, numberOfPages}) => {
   const navigate = useNavigate();
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -96,7 +126,11 @@ const Grid: React.FC<GridProps> = ({populationDataPage, loading, setPage, page, 
         name: {name: fullName, image: item.picture.thumbnail},
         infected: item.infected,
         state: item.location.state,
-        nationality: item.nat,
+        city: item.location.city,
+        age: item.dob.age,
+        doi: item.infected ? new Date(item.registered.date).toLocaleDateString("en-US") : "",
+        email: item.email,
+        phone: item.cell,
       }
     })
 
@@ -104,6 +138,8 @@ const Grid: React.FC<GridProps> = ({populationDataPage, loading, setPage, page, 
       columns: {
         columnVisibilityModel: {
           id: false,
+          email: false,
+          phone: false,
         }
       }
     }
@@ -128,7 +164,7 @@ const Grid: React.FC<GridProps> = ({populationDataPage, loading, setPage, page, 
           {...data}
         />
          <Pagination 
-         count={10} 
+         count={numberOfPages} 
          variant="outlined" 
          shape="rounded" 
          onChange={handleChangePage}
