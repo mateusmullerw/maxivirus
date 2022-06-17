@@ -1,9 +1,14 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/home/Home";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import About from "./pages/About/About";
+import UserDetails from "./pages/UserDetails/UserDetails";
 
 const AppRoutes = () => (
   <Routes>
-    <Route path={`/`} element={<Home />} />
+    <Route path='/:page' element={<Home />} />
+    <Route path='/about' element={<About />} />
+    <Route path='/user/:id' element={<UserDetails />} />
+    <Route path='/' element={<Navigate to="/1" replace />} />
   </Routes>
 );
 
