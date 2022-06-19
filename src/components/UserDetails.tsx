@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { CitizenInfo } from "context";
+import { CitizenInfo } from "contexts/populationContext";
 import { Modal, Typography, Chip, Button } from "@mui/material";
 import {
   UserSummary,

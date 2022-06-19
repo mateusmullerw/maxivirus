@@ -5,7 +5,7 @@ import {
   GridRenderCellParams,
   GridRowParams,
 } from "@mui/x-data-grid";
-import { CitizenInfo } from "context";
+import { CitizenInfo } from "contexts/populationContext";
 import { Typography, Avatar, Chip, Pagination } from "@mui/material";
 import { AvatarContainer, GridContainer } from "./PopoulationGrid.styles";
 

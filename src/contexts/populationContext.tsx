@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import { api } from './api/axios';
+import { api } from '../api/axios';
 
 export type Survival = "All" | "Survivor" | "Infected";
 type Filters = {

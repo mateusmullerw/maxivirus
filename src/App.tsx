@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./routes";
-import { PopulationProvider } from "./context";
+import { PopulationProvider } from "./contexts/populationContext";
 import {StyledEngineProvider, ThemeProvider, createTheme} from '@mui/material';
 
 export const theme = createTheme({
