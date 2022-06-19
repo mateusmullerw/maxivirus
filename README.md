@@ -3,6 +3,8 @@ This is a test project made for an opening at Maxihost.
 
 It uses https://randomuser.me to get the population data.
 
+You can use this application at https://maxivirus.vercel.app/1
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

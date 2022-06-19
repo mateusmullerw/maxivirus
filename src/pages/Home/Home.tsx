@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { PopulationContext, Survival, CitizenInfo } from "contexts/populationContext";
+import {
+  PopulationContext,
+  Survival,
+  CitizenInfo,
+} from "contexts/populationContext";
 import Grid from "components/PopulationGrid";
 import UserDetails from "components/UserDetails";
 import MainLayout from "layouts/Main";

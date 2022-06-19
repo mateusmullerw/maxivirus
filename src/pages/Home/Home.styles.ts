@@ -7,5 +7,4 @@ export const Filters = styled.div`
     align-items: center;
     gap: 16px;
     margin: 24px 0;
-
 `;
