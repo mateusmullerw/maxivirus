@@ -190,7 +190,6 @@ const PopulationProvider = (props: PopulationProviderProps) => {
         let newInfectedByUser = infectedByUser;
         newInfectedByUser.push({id: id})
         setInfectedByUser(newInfectedByUser)
-
         const userIndex = populationData.findIndex(item => item.id === id)
         const newInfected = {...populationData[userIndex], infected: true}
         let newPopulationData = [...populationData]
