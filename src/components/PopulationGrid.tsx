@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   DataGrid,
   GridColDef,
@@ -8,7 +8,6 @@ import {
 import { CitizenInfo } from "context";
 import { Typography, Avatar, Chip, Pagination } from "@mui/material";
 import { AvatarContainer, GridContainer } from "./PopoulationGrid.styles";
-import { useNavigate } from "react-router-dom";
 
 const renderInfected = (infected: boolean | undefined) => {
   const label = infected ? "Infected" : "Suvivor";

@@ -12,7 +12,6 @@ import Tab from "@mui/material/Tab";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { BR_STATES_NAMES } from "constants/constants";
-import { GridRowParams } from "@mui/x-data-grid";
 
 const Home = () => {
   const {

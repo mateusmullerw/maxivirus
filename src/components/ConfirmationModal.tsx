@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Typography, Chip, Button, TextField } from "@mui/material";
+import { Modal, Typography, Button, TextField } from "@mui/material";
 import { ModalContainer, ButtonsContainer } from "./ConfirmationModal.styles";
 import { useTheme } from "@mui/material/styles";
 

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Avatar, Chip } from "@mui/material";
 
 export const ModalContainer = styled.div`
     display: flex;
