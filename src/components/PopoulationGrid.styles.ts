@@ -1,8 +1,12 @@
 import styled from "styled-components";
 
-export const GridContainer = styled.div`
+type Props = {
+  height: string
+}
+export const GridContainer = styled.div<Props>`
     width: 100%;
-    height: 1000px;
+    height: ${(props)=> props.height};
+    max-width: 1450px;
     display: flex;
     flex-direction: column;
     align-items: center;

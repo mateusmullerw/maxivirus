@@ -1,27 +1,23 @@
-import * as React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
-import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import ListAltRoundedIcon from "@mui/icons-material/ListAltRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as MaxihostLogo } from "assets/maxihost-logo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { LogoContainer, Toolbar } from "./Main.styles";
-import { ArrowBack } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -32,9 +28,9 @@ interface Props {
 
 const drawerOptions = [
   {
-    label: "Dashboard",
+    label: "Population list",
     route: "/",
-    icon: <DashboardRoundedIcon />,
+    icon: <ListAltRoundedIcon />,
   },
   {
     label: "About",
@@ -44,7 +40,7 @@ const drawerOptions = [
 ];
 
 const MainLayout = (props: Props) => {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isLargeDisplay = useMediaQuery(theme.breakpoints.up("md"));
   const navigate = useNavigate();
@@ -53,24 +49,30 @@ const MainLayout = (props: Props) => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleMenuItem = (index: number, route: string) => {
+    navigate(route);
+  };
+
   const drawer = (
     <div>
       <LogoContainer>
         <MaxihostLogo />
       </LogoContainer>
       <List>
-        {drawerOptions.map((item, index) => (
-          <ListItem
-            key={item.label}
-            onClick={() => navigate(item.route)}
-            disablePadding
-          >
-            <ListItemButton>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {drawerOptions.map((item, index) => {
+          return (
+            <ListItem
+              key={item.label}
+              onClick={() => handleMenuItem(index, item.route)}
+              disablePadding
+            >
+              <ListItemButton>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </div>
   );
@@ -144,8 +146,9 @@ const MainLayout = (props: Props) => {
         sx={{
           flexGrow: 1,
           p: 3,
+          paddingTop: 0,
           width: { md: `calc(100% - ${drawerWidth}px)` },
-          height: "100%",
+          height: "100vh",
         }}
       >
         <Toolbar />

@@ -104,6 +104,7 @@ const columns: GridColDef[] = [
 ];
 
 type GridProps = {
+  height: string;
   populationDataPage: CitizenInfo[];
   loading: boolean;
   setPage: Function;
@@ -114,6 +115,7 @@ type GridProps = {
 };
 
 const Grid: React.FC<GridProps> = ({
+  height,
   populationDataPage,
   loading,
   setPage,
@@ -122,7 +124,7 @@ const Grid: React.FC<GridProps> = ({
   numberOfPages,
   onRowClick,
 }) => {
-  
+
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number
@@ -170,9 +172,9 @@ const Grid: React.FC<GridProps> = ({
   };
 
   return (
-    <GridContainer>
+    <GridContainer height={height}>
       <DataGrid
-        style={{ width: "100%" }}
+        style={{ width: "100%"}}
         autoPageSize
         disableColumnFilter
         hideFooter
@@ -183,6 +185,7 @@ const Grid: React.FC<GridProps> = ({
         {...data}
       />
       <Pagination
+        color="primary"
         count={numberOfPages}
         variant="outlined"
         shape="rounded"

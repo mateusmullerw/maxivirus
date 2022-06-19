@@ -76,12 +76,21 @@ const Home = () => {
   };
 
   const handleInfect = () => {
-    setInfected(selectedUser!.id)
-    setSelectedUser({...selectedUser!, infected: true});
-  }
+    setInfected(selectedUser!.id);
+    setSelectedUser({ ...selectedUser!, infected: true });
+  };
 
   return (
     <MainLayout pageTitle="Population list">
+      <Tabs
+        style={{ margin: "0 0 0 0" }}
+        value={selectedTab}
+        onChange={handleChangeTab}
+      >
+        <Tab label="All" value="All" />
+        <Tab label="Infected" value="Infected" />
+        <Tab label="Survivor" value="Survivor" />
+      </Tabs>
       <Filters>
         <TextField
           id="name-filter"
@@ -89,6 +98,7 @@ const Home = () => {
           variant="outlined"
           value={filters.name}
           onChange={handleFilterName}
+          style={{ width: "200px" }}
         />
         <Select
           id="state-filter"
@@ -104,12 +114,9 @@ const Home = () => {
           ))}
         </Select>
       </Filters>
-      <Tabs value={selectedTab} onChange={handleChangeTab}>
-        <Tab label="All" value="All" />
-        <Tab label="Infected" value="Infected" />
-        <Tab label="Survivor" value="Survivor" />
-      </Tabs>
+
       <Grid
+        height={"calc(100% - 252px)"}
         onRowClick={handleRowClick}
         populationDataPage={currentPageData}
         loading={loading}
