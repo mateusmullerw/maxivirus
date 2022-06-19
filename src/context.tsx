@@ -1,18 +1,17 @@
 import React, {createContext, useEffect, useState} from 'react';
 import { api } from './api/axios';
 
+export type Survival = "All" | "Survivor" | "Infected";
 type Filters = {
     name: string;
-    survival: "All" | "Survivor" | "Infected";
-    state: string | undefined;
-    gender: string;
+    survival: Survival;
+    state: string;
 }
 
 const initialFilters: Filters = {
     name: "",
     survival: "All",
-    state: undefined,
-    gender: "none"
+    state: "All States",
 }
 
 type InfectedByUser = {
@@ -73,13 +72,13 @@ const initialPopulationData: CitizenInfo[] = [];
 type PopulationContextType={
     loading: boolean,
     currentPageData: CitizenInfo[],
-    editCitzen: Function,
     page: number,
     setPage: Function,
     pageSize: number,
     setPageSize: Function,
     filters: Filters,
     setFilters: Function,
+    setInfected: Function,
     setNationality: Function,
     numberOfPages: number,
 }
@@ -87,13 +86,13 @@ type PopulationContextType={
 const initialValue: PopulationContextType = {
     loading: true,
     currentPageData: [],
-    editCitzen: ()=>{},
     page: 1,
     setPage: ()=>{},
     pageSize: 10,
     setPageSize: ()=>{},
     filters: initialFilters,
     setFilters: ()=>{},
+    setInfected: ()=>{},
     setNationality: ()=>{},
     numberOfPages: 1,
 }
@@ -104,7 +103,7 @@ type PopulationProviderProps = {
 }
 const PopulationProvider = (props: PopulationProviderProps) => {
     const resultsNumber = 500;
-    const seed = "maxihost"
+    const seed = "zombies"
 
     const [loading, setLoading] = useState(initialValue.loading)
     const [populationData, setPopulationData] = useState(initialPopulationData)
@@ -161,7 +160,7 @@ const PopulationProvider = (props: PopulationProviderProps) => {
             newFilteredData = populationData.filter(item => item.infected)
         }
 
-        if(filters.state){
+        if(filters.state !== "All States"){
         newFilteredData = newFilteredData.filter(item => item.location.state === filters.state)
         }
 
@@ -186,17 +185,30 @@ const PopulationProvider = (props: PopulationProviderProps) => {
             getCurrentPageData()
         }
     }, [seed, page, pageSize, nationality])
+
+    const setInfected = (id: string) => {
+        let newInfectedByUser = infectedByUser;
+        newInfectedByUser.push({id: id})
+        setInfectedByUser(newInfectedByUser)
+
+        const userIndex = populationData.findIndex(item => item.id === id)
+        const newInfected = {...populationData[userIndex], infected: true}
+        let newPopulationData = [...populationData]
+        newPopulationData.splice(userIndex, 1, newInfected)
+        console.log(newPopulationData)
+        setPopulationData(newPopulationData)
+    }
    
     const value = {
         loading: loading,
         currentPageData: currentPageData,
-        editCitzen: ()=>(console.log("edit")),
         page: page,
         setPage: setPage,
         pageSize: pageSize,
         setPageSize: setPageSize,
         filters,
         setFilters: setFilters,
+        setInfected: setInfected,
         setNationality: setNationality,
         numberOfPages: Math.ceil(filteredData.length / pageSize)
     }

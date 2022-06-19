@@ -13,7 +13,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
@@ -21,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as MaxihostLogo } from "assets/maxihost-logo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { LogoContainer } from "./Main.styles";
+import { LogoContainer, Toolbar } from "./Main.styles";
 import { ArrowBack } from "@mui/icons-material";
 
 const drawerWidth = 240;
@@ -98,15 +97,6 @@ const MainLayout = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          {/* <IconButton
-            color="inherit"
-            aria-label="go back"
-            edge="start"
-            onClick={() => navigate}
-            sx={{ mr: 2 }}
-          >
-            <ArrowBack />
-          </IconButton> */}
           <Typography variant="h5" color="#2B223D" noWrap component="div">
             {props.pageTitle}
           </Typography>

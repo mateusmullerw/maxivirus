@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import MainLayout from "layouts/Main";
 import { Typography } from "@mui/material";
 
-function Home() {
+const About = () => {
 
   return (
         <MainLayout pageTitle="About">
@@ -11,4 +11,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default About;
