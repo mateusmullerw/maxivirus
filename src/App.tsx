@@ -25,10 +25,11 @@ export const theme = createTheme({
     background: {
       default: '#f1f5f8',
     },
+    divider: 'rgba(43,34,61,0.15)',
   },
 });
 
-export default function App() {
+const App = () => {
   return (
     <Router>
       <ThemeProvider theme={theme}>
@@ -41,3 +42,5 @@ export default function App() {
     </Router>
   );
 }
+
+export default App;

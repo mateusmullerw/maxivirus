@@ -28,18 +28,6 @@ type SurvivalMap = {
   false: SurvivalOption;
   true: SurvivalOption;
 };
-const survivalMap: SurvivalMap = {
-  false: {
-    label: "Survivor",
-    icon: <HealthAndSafetyRoundedIcon />,
-    color: "success",
-  },
-  true: {
-    label: "Infected",
-    icon: <CoronavirusRoundedIcon />,
-    color: "error",
-  },
-};
 
 type Props = {
   open: boolean;
@@ -74,11 +62,29 @@ const UserDetails = (props: Props) => {
 
   const handleConfirmInfection = () => {
     handleInfect();
-    setOpenConfirmation(false)
-  }
+    setOpenConfirmation(false);
+  };
+
+  const survivalMap: SurvivalMap = {
+    false: {
+      label: "Survivor",
+      icon: <HealthAndSafetyRoundedIcon />,
+      color: "success",
+    },
+    true: {
+      label: "Infected",
+      icon: <CoronavirusRoundedIcon />,
+      color: "error",
+    },
+  };
 
   return (
-    <Modal open={open} onClose={handleClose} aria-labelledby="user-details">
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="user-details"
+      data-testid="user-details"
+    >
       <ModalContainer>
         <UserSummary>
           <StyledAvatar
@@ -89,18 +95,19 @@ const UserDetails = (props: Props) => {
           />
           <Info>
             <Name>
-              <Typography variant="h5">{fullName}</Typography>
+              <Typography data-testid="name-info" variant="h5">
+                {fullName}
+              </Typography>
               <Chip
+                data-testid="infected-info"
                 size="small"
-                icon={
-                  survivalMap[(infected.toString() as "true") || "false"].icon
-                }
+                icon={survivalMap[infected.toString() as "true" | "false"].icon}
                 label={
-                  survivalMap[(infected.toString() as "true") || "false"].label
+                  survivalMap[infected.toString() as "true" | "false"].label
                 }
                 variant="outlined"
                 color={
-                  survivalMap[(infected.toString() as "true") || "false"].color
+                  survivalMap[infected.toString() as "true" | "false"].color
                 }
               ></Chip>
             </Name>
@@ -120,12 +127,14 @@ const UserDetails = (props: Props) => {
         </UserSummary>
         <Row>
           <OutlinedInfo
+            data-testid="phone-info"
             icon={<LocalPhoneRoundedIcon />}
             label={phone}
             variant="outlined"
             color="default"
           ></OutlinedInfo>
           <OutlinedInfo
+            data-testid="email-info"
             icon={<EmailRoundedIcon />}
             label={email}
             variant="outlined"
@@ -133,6 +142,7 @@ const UserDetails = (props: Props) => {
           ></OutlinedInfo>
         </Row>
         <OutlinedInfo
+          data-testid="address-info"
           icon={<PlaceRoundedIcon />}
           label={fullAddress}
           variant="outlined"
@@ -140,13 +150,15 @@ const UserDetails = (props: Props) => {
         ></OutlinedInfo>
         {infected ? (
           <InconAndInfo
+            data-testid="infected-since"
             icon={<CoronavirusRoundedIcon />}
             label={`Infected ${new Date(registered.date).toDateString()}`}
             variant="outlined"
-            color="default"
+            color="error"
           ></InconAndInfo>
         ) : (
           <Button
+            data-testid="infect-button"
             onClick={() => setOpenConfirmation(true)}
             variant="outlined"
             color="error"
@@ -156,14 +168,14 @@ const UserDetails = (props: Props) => {
           </Button>
         )}
         <ConfirmationModal
-        title="Infect"
-        message="Are you sure you want to infect this person? This action is irreversible."
-        confirmationText={confirmLabel}
-        confirmButtonLabel="Infect"
-        onConfirm={handleConfirmInfection}
-        open={openConfirmation}
-        handleClose={() => setOpenConfirmation(false)}
-      />
+          title="Infect"
+          message="Are you sure you want to infect this person? This action is irreversible."
+          confirmationText={confirmLabel}
+          confirmButtonLabel="Infect"
+          onConfirm={handleConfirmInfection}
+          open={openConfirmation}
+          handleClose={() => setOpenConfirmation(false)}
+        />
       </ModalContainer>
     </Modal>
   );

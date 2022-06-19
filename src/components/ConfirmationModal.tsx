@@ -35,7 +35,12 @@ const ConfirmationModal = (props: Props) => {
   };
 
   return (
-    <Modal open={open} onClose={handleClose} aria-labelledby="user-details">
+    <Modal
+      data-testid="confirmation-modal"
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="user-details"
+    >
       <ModalContainer>
         <Typography variant="h5">{title}</Typography>
         <Typography variant="body1">{message}</Typography>
@@ -43,8 +48,8 @@ const ConfirmationModal = (props: Props) => {
           To confirm this action, type "
           <strong style={{ color: theme.palette.error.dark }}>
             {confirmationText}
-          </strong>"
-          below:
+          </strong>
+          " below:
         </Typography>
         <TextField
           id="confirmation-text"
